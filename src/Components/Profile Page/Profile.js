@@ -3,25 +3,24 @@ import '../Styles/profile.css';
 import { useAuth } from '../Context/AuthProvider';
 import axios from 'axios';
 
-function Profile() {
+function Profile() {    
+    const{user} = useAuth();
+    const [,setUser] = useState(user);
 
-    // const { user } = useAuth();
-    console.log("<<<<<<Danish>>>>>>>>>>");
-    const [user,setUser] = useState(null);
-    useEffect(async ()=>{       
-        const fetchData = async () => {
-            try {
-              // Your asynchronous code here
-            const response = await axios.get('user/login')
-            const userData = response.data
-            setUser(userData)
-            console.log("abcd",user)
-            } catch (error) {
-              console.log(error);
-            }
-          };      
-          fetchData();
-    },[]);
+    // useEffect(async ()=>{       
+    //     const fetchData = async () => {
+    //         try {
+    //           // Your asynchronous code here
+    //         const response = await axios.get('user/login')
+    //         const userData = response.data
+    //         setUser(userData)
+    //         console.log("abcd",user)
+    //         } catch (error) {
+    //           console.log(error);
+    //         }
+    //       };      
+    //       fetchData();
+    // },[]);
 
     console.log("typeof user is ",(user));
     const [password, passwordSet] = useState()
