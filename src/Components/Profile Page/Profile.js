@@ -6,20 +6,24 @@ import axios from 'axios';
 function Profile() {
 
     // const { user } = useAuth();
-    const [user,setUser] = useState(JSON.parse(localStorage.getItem("user")).data);
-    useEffect(async ()=>{
-        // let users=localStorage.getItem("user")
-        // setUser(JSON.parse(users));
-        // console.log(users);
-        // setUser();
-        // console.log(user);
-        nameSet(user.name)
-        passwordSet(user.password)
-        emailSet(user.email)
-        passwordCnfSet(user.password)
-        console.log("abcd",user)
+    console.log("<<<<<<Danish>>>>>>>>>>");
+    const [user,setUser] = useState(null);
+    useEffect(async ()=>{       
+        const fetchData = async () => {
+            try {
+              // Your asynchronous code here
+            const response = await axios.get('user/login')
+            const userData = response.data
+            setUser(userData)
+            console.log("abcd",user)
+            } catch (error) {
+              console.log(error);
+            }
+          };      
+          fetchData();
     },[]);
-    // console.log("typeof user is ",(user));
+
+    console.log("typeof user is ",(user));
     const [password, passwordSet] = useState()
     const [passwordCnf, passwordCnfSet] = useState("")
     const [email, emailSet] = useState("");
@@ -29,17 +33,18 @@ function Profile() {
     }
     const handleClick = async () => {
         try {
-            console.log(user._id);
-            const data = await axios.patch("/user/" + user._id, {
-               email,
+            console.log(user.name, "Hello g User name dedo");
+            const response = await axios.patch(`/user/${user._id}`, {
+                email,
                 name,
                 password,
                 confirmPassword: passwordCnf,
-                role: user.role,
-                _id:user._id
-            });
-            console.log(data.data.data);
-            localStorage.setItem("user", JSON.stringify(data.data.data));
+                role: user.role
+              });
+              
+              const updatedUser = response.data;
+              console.log("Updated User:", updatedUser);
+            
         } catch (error) {
             console.log(error);
         }

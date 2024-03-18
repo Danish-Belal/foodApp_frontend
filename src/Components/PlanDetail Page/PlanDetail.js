@@ -12,54 +12,73 @@ function PlanDetail() {
     const [review, setreview] = useState("");
     const [rate, setrate] = useState();
     const { user } = useAuth();
-    console.log(id);
-    useEffect(async () => {
-        console.log("inside useeffect");
-        const data = await axios.get("/plans/plan/"+id)
-        console.log(data,565785765);
-        delete data.data.data["_id"]
-        delete data.data.data["__v"]
-        setplan(data.data.data)
-        const reviews = await axios.get("/review/"+id);
-        // console.log(reviews);
-        console.log(reviews.data.data);
-        setarr(reviews.data.data)
-        // console.log(arr);
-    }, [])
+    console.log(id, "<<<<<<<<<<Danish>>>>>>>>>>>>>>");
+    useEffect(() => {
+        const fetchPlan = async () => {
+        try {
+            const planResponse = await axios.get(`/planDetail/${id}`);
+            const planData = planResponse.data.data;
+            delete planData._id;
+            delete planData.__v;
+            setplan(planData);
+        } catch (error) {
+            console.log(error);
+        }
+        };
+    
+        const fetchReviews = async () => {
+        try {
+            const reviewsResponse = await axios.get(`/review/${id}`);
+            const reviewsData = reviewsResponse.data.data;
+            setarr(reviewsData);
+        } catch (error) {
+            console.log(error);
+        }
+        };
+            
+        fetchPlan();
+        fetchReviews();
+    }, [id]);
+    
 
     function capitalizeFirstLetter(string) {
         return string.charAt(0).toUpperCase() + string.slice(1);
     }
     console.log(rate);
     // console.log("user ",user);
+
     const handleClick = async () => {
-        console.log(123645);
-        const data = await axios.post("/review/crud/"+id, {
-            "review": review,
-            "rating": rate,
-            "user": user.data._id,
-            "plan": id
-        })
-        console.log(data);
-        const reviews = await axios.get("/review/" + id);
-        // console.log(reviews);
-        setarr(reviews.data.data);
-    }
-    const handleDelete = async(reviewId) =>{
-        try{
-           
-            // console.log("12345",reviewId);
-            let data = await axios.delete("/review/crud/"+id, { data: { "id": reviewId } });
-            console.log(data.config.data);
-            const reviews = await axios.get("/review/" + id);
-            console.log(reviews);
-            setarr(reviews.data.data);
-            alert("review deleted");
+        try {
+            const data = await axios.post(`/review/crud/${id}`, {
+                review,
+                rating: rate,
+                user: user.data.id,
+                plan: id
+            });
+
+            const reviewsResponse = await axios.get(`/review/${id}`);
+            const reviewsData = reviewsResponse.data.data;
+            setarr(reviewsData);
+        } catch (error) {
+            console.log(error);
         }
-        catch(err){
-            alert(err);
+    };
+
+    
+    const handleDelete = async (reviewId) => {
+        try {
+            await axios.delete(`/review/crud/${id}`, { data: { id: reviewId } });
+
+            const reviewsResponse = await axios.get(`/review/${id}`);
+            const reviewsData = reviewsResponse.data.data;
+            setarr(reviewsData);
+
+            alert("Review deleted");
+        } catch (error) {
+            console.log(error);
+            alert("Error occurred while deleting the review");
         }
-    }
+    };
 
     return (
         <div className="pDetailBox">

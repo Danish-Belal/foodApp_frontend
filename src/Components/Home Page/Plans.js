@@ -18,6 +18,17 @@ function Plans() {
         }
     }, [])
 
+    const handleClick = async () => {
+        try {
+        const response = await axios.post('/views/booking.html');
+          // Handle the response from the backend if needed
+        console.log(response.data);
+        } catch (error) {
+          // Handle errors if the API call fails
+          console.log(error);
+        }
+      };
+
     return (
         <div className='plansCard'>
             <div className='h1Box'>
@@ -50,7 +61,7 @@ function Plans() {
                                 <p className='point'>{ele.ratingsAverage} rated meal.</p>
                             </div>
                         </div>
-                        <button className='btn'>I'm Hungry</button>
+                        <button className='btn' onClick={handleClick}>I'm Hungry</button>
                     </div>
                 )}
             </div>

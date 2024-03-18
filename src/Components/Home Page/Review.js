@@ -4,18 +4,28 @@ import '../Styles/review.css'
 import axios from 'axios';
 
 function Review() {
-    const [arr, setarr] = useState([]);
+    const [arr, setArr] = useState([]);
+    const [error, setError] = useState(null);
 
-    useEffect(async () => {
-        try {
-            const data = await axios.get("/review/top3");
-            console.log(data);
-            setarr(data.data.data);
-            // console.log(data.data.length);
-        } catch (err) {
-            console.log(err);
-        }
-    }, [])
+    useEffect(() => {
+        const fetchReviews = async () => {
+          try {
+            const response = await axios.get("/review/top3");
+            // console.log("Response data:", response.data);
+            setArr(response.data.top3Reviews);
+
+          } catch (error) {
+            console.error("Error fetching reviews:", error);
+            setError(error);
+          }
+        };
+    
+        fetchReviews();
+    }, []);
+
+    if (error) {
+        return <div>Error fetching reviews: {error.message}</div>;
+    }
 
     return (
         <div className="reviewImg">
@@ -25,32 +35,35 @@ function Review() {
                     <div className="line"></div>
                 </div>
                 <div className="rDetail">
-                    {
-                        arr && arr?.map((ele, key) =>
-                            <div className="rCard" key={key}>
-                                {console.log("ele in review.js",ele)}
-                                <div className='rimage'>
-                                    <img alt='' src={ele.user.profileImage} className='img' />
-                                </div>
-                                <div className='rheader'>
-                                    <h3 className="rh3">{ele.user.name}</h3>
-                                </div>
-                                <div className='rsummary'>
-                                    <p className='para'>
-                                        {ele.review}
-                                    </p>
-                                </div>
-                                <div><h4>Plan Name : {ele.plan.name}</h4></div>
-                                <div className='frate'>
-                                    {Array.from(Array(ele.rating).keys()).map((ele, key) => <img alt='' src={Star} className='img' />)}
-                                </div>
+                    {arr && arr.map((ele, key) => (
+                        <div className="rCard" key={key}>
+                            {console.log("Review data:", ele)}
+                            <div className='rimage'>
+                                <img alt='' src={ele && ele.user && ele.user.profileImage ? ele.user.profileImage : 'default-image-url'} className='img' />
                             </div>
-                        )
-                    }
+                            <div className='rheader'>
+                                <h3 className="rh3">{ele && ele.user && ele.user.name ? ele.user.name : 'Unknown User'}</h3>
+                            </div>
+                            <div className='rsummary'>
+                                <p className='para'>
+                                    {ele && ele.review}
+                                </p>
+                            </div>
+                            <div><h4>Plan Name : {ele && ele.plan && ele.plan.name ? ele.plan.name : 'Unknown Plan'}</h4></div>
+                            
+                            <div className='frate'>
+                                {/* Check if ele.rating exists and is a valid number */}
+                                {typeof ele.rating === 'number' && Array.from(Array(Math.floor(ele.rating)).keys()).map((_, index) => (
+                                    <img key={index} alt='' src={Star} className='img' />
+                                ))}
+                            </div>
+                        </div>
+                    ))}
+                
                 </div>
             </div>
         </div>
-    )
+    );
 }
 
-export default Review
+export default Review;

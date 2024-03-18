@@ -31,7 +31,8 @@ function NavBar() {
                         <>
                         {console.log(user)}
                             <li>
-                                <Link to="/profilePage">{user?.data?.name}</Link>
+                                <Link to="/profilePage"> Danish Belal</Link>
+                                
                             </li>
                             <li>
                                 <Link to="" onClick={logout}>Logout</Link>

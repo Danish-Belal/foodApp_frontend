@@ -5,8 +5,7 @@ import { Link } from "react-router-dom";
 import { useHistory } from 'react-router-dom';
 import '../Styles/login.css'
 
-function 
-Login() {
+function Login() {
 
     const history = useHistory();
     const [password, passwordSet] = useState("")
