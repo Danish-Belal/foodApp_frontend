@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Star from '../Images/star.png'
+import UserIcon from '../Images/UserIcon.png'
 import '../Styles/review.css'
 import axios from 'axios';
 
@@ -39,7 +40,7 @@ function Review() {
                         <div className="rCard" key={key}>
                             {console.log("Review data:", ele)}
                             <div className='rimage'>
-                                <img alt='' src={ele && ele.user && ele.user.profileImage ? ele.user.profileImage : 'default-image-url'} className='img' />
+                                <img alt='' src={ele && ele.user && ele.user.profileImage ? ele.user.profileImage : UserIcon} className='img' />
                             </div>
                             <div className='rheader'>
                                 <h3 className="rh3">{ele && ele.user && ele.user.name ? ele.user.name : 'Unknown User'}</h3>
