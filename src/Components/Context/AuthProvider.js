@@ -29,7 +29,7 @@ function AuthProvider({ children }) {
                 password: password
             });
             console.log("dataaa",data.data);
-            userSet(data.data);
+            userSet(data.data.user);
             localStorage.setItem("user", JSON.stringify(data.data));
             return data;
         }
